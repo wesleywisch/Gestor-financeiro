@@ -1,4 +1,7 @@
 const transactionsUl = document.querySelector('#transactions');
+const icomeDisplay = document.querySelector('#money-plus');
+const expenseDiplay = document.querySelector('#money-minus');
+const balanceDiplay = document.querySelector('#balance');
 
 const dummyTransactions = [
     { id: 1, name: 'Bolo de brigadeiro', amount: -20 },
@@ -21,4 +24,26 @@ function addTransactionIntoDOM(transaction) {
     `;
 
     transactionsUl.prepend(li);
+}
+
+function updateBalanceValues() {
+    const transactionsAmounts = dummyTransactions
+        .map(transaction => transaction.amount);
+    const total = transactionsAmounts
+        .reduce((accumulator, transaction) => accumulator + transaction, 0).toFixed(2);
+    const icome = transactionsAmounts
+        .filter(value => value > 0)
+        .reduce((accumulator, value) => accumulator + value, 0).toFixed(2);
+    const expense = transactionsAmounts
+        .filter(value => value < 0)
+        .reduce((accumulator, value) => accumulator + value, 0).toFixed(2);
+
+    balanceDiplay.textContent = `R$ ${total}`;
+    icomeDisplay.textContent = `R$ ${icome}`;
+    expenseDiplay.textContent = `R$ ${expense}`;
+}
+
+function init() {
+    dummyTransactions.forEach(addTransactionIntoDOM);
+    updateBalanceValues();
 }
